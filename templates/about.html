@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+
+{% block title %}VisionSphere — Architecture & Technical Specifications{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <!-- Header -->
+    <div class="mb-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full glass-inset text-cyan-400 text-xs font-mono mb-2 border border-cyan-400/30 shadow-sm shadow-cyan-500/20">
+            <i class="fa-solid fa-microchip"></i> System Architecture
+        </div>
+        <h1 class="text-3xl font-extrabold text-white">Engineering & Vision Pipeline</h1>
+        <p class="text-slate-400 text-xs sm:text-sm mt-1 max-w-3xl font-medium">
+            A deep dive into the computer vision algorithms, convolutional neural network backbones, explainable AI mechanics, and real-time streaming pipeline powering VisionSphere.
+        </p>
+    </div>
+
+    <!-- Tech Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <!-- Card 1: Deep Learning Engine -->
+        <div class="glass-card p-6 flex flex-col gap-3 border-gradient-cyan">
+            <div class="w-11 h-11 rounded-2xl glass-inset border border-cyan-400/30 flex items-center justify-center text-cyan-400 mb-1 shadow-lg shadow-cyan-500/20">
+                <i class="fa-solid fa-brain text-xl"></i>
+            </div>
+            <h2 class="text-lg font-bold text-white tracking-tight">Convolutional Neural Networks & Backbones</h2>
+            <p class="text-xs text-slate-300 leading-relaxed font-medium">
+                VisionSphere leverages pretrained vision models trained on the ImageNet-1k dataset (1.4 million images across 1,000 object categories). Supported architectures include:
+            </p>
+            <ul class="text-xs text-slate-400 space-y-2 list-disc list-inside mt-1 font-mono">
+                <li><strong class="text-cyan-300">MobileNetV3:</strong> Hard-swish activations and squeeze-and-excitation blocks for ultra-low latency mobile/web inference.</li>
+                <li><strong class="text-cyan-300">ResNet50:</strong> 50-layer deep residual network with bottleneck skip connections solving vanishing gradients.</li>
+                <li><strong class="text-cyan-300">EfficientNet-B0:</strong> Uniform compound scaling across network depth, width, and input resolution.</li>
+            </ul>
+        </div>
+
+        <!-- Card 2: Explainable AI & Grad-CAM -->
+        <div class="glass-card p-6 flex flex-col gap-3 border-gradient-cyan">
+            <div class="w-11 h-11 rounded-2xl glass-inset border border-purple-400/30 flex items-center justify-center text-purple-400 mb-1 shadow-lg shadow-purple-500/20">
+                <i class="fa-solid fa-fire text-xl"></i>
+            </div>
+            <h2 class="text-lg font-bold text-white tracking-tight">Explainable AI (Grad-CAM)</h2>
+            <p class="text-xs text-slate-300 leading-relaxed font-medium">
+                Gradient-weighted Class Activation Mapping (Grad-CAM) computes the gradients of the target class score with respect to the feature activation maps of the final convolutional layer:
+            </p>
+            <div class="glass-inset p-3 rounded-xl border border-white/10 text-[11px] font-mono text-cyan-300">
+                L_GradCAM^c = ReLU( Σ_k α_k^c * A^k )
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed font-medium">
+                The resulting activation map is upsampled with bilinear interpolation and colorized using OpenCV's JET colormap, highlighting the exact visual patterns the network used to make its decision.
+            </p>
+        </div>
+
+        <!-- Card 3: OpenCV Computer Vision Suite -->
+        <div class="glass-card p-6 flex flex-col gap-3 border-gradient-cyan">
+            <div class="w-11 h-11 rounded-2xl glass-inset border border-emerald-400/30 flex items-center justify-center text-emerald-400 mb-1 shadow-lg shadow-emerald-500/20">
+                <i class="fa-solid fa-eye text-xl"></i>
+            </div>
+            <h2 class="text-lg font-bold text-white tracking-tight">OpenCV Visual Diagnostics</h2>
+            <p class="text-xs text-slate-300 leading-relaxed font-medium">
+                Prior to model inference, images undergo automated computer vision diagnostics:
+            </p>
+            <ul class="text-xs text-slate-400 space-y-2 list-disc list-inside mt-1 font-mono">
+                <li><strong class="text-emerald-300">Laplacian Variance:</strong> Computes the 2nd spatial derivative to detect blurry or unfocused captures.</li>
+                <li><strong class="text-emerald-300">CLAHE:</strong> Contrast Limited Adaptive Histogram Equalization in LAB color space prevents over-amplification of noise.</li>
+                <li><strong class="text-emerald-300">Contour Saliency:</strong> Gaussian smoothing and Otsu binarization locate primary foreground objects.</li>
+            </ul>
+        </div>
+
+        <!-- Card 4: Architecture & Software Stack -->
+        <div class="glass-card p-6 flex flex-col gap-3 border-gradient-cyan">
+            <div class="w-11 h-11 rounded-2xl glass-inset border border-amber-400/30 flex items-center justify-center text-amber-400 mb-1 shadow-lg shadow-amber-500/20">
+                <i class="fa-solid fa-server text-xl"></i>
+            </div>
+            <h2 class="text-lg font-bold text-white tracking-tight">Software Architecture & Tech Stack</h2>
+            <p class="text-xs text-slate-300 leading-relaxed font-medium">
+                Designed for high performance, modularity, and clean separation of concerns:
+            </p>
+            <ul class="text-xs text-slate-400 space-y-1.5 list-disc list-inside mt-1 font-mono">
+                <li><strong>Backend:</strong> Flask 3.1 & Python 3.14</li>
+                <li><strong>Inference Engine:</strong> TensorFlow 2.22 / Keras 3 with oneDNN CPU vectorization</li>
+                <li><strong>Image Processing:</strong> OpenCV 5.0 (cv2) & NumPy</li>
+                <li><strong>Frontend:</strong> Ultra Luxury Glassmorphism, Ambient Mesh Gradients, Canvas API, Web Speech TTS</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

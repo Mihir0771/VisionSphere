@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}VisionSphere — Batch Image Classification{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <!-- Header -->
+    <div class="mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full glass-inset text-cyan-400 text-xs font-mono mb-2 border border-cyan-400/30 shadow-sm shadow-cyan-500/20">
+                <i class="fa-solid fa-layer-group"></i> Multi-File Parallel Pipeline
+            </div>
+            <h1 class="text-3xl font-extrabold text-white">Batch Classification Studio</h1>
+            <p class="text-slate-400 text-xs sm:text-sm mt-1 font-medium">
+                Upload multiple images simultaneously, execute fast batched inference, and export structured prediction datasets.
+            </p>
+        </div>
+
+        <!-- Model Select & Export Buttons -->
+        <div class="flex items-center gap-3">
+            <select id="batch-model" class="glass-select text-slate-100 text-xs font-mono py-2 px-3">
+                {% for key, m in models.items() %}
+                <option value="{{ key }}" class="bg-slate-900">{{ m.name }}</option>
+                {% endfor %}
+            </select>
+            <button id="btn-export-csv" class="glass-btn px-4 py-2 text-xs flex items-center gap-2 disabled:opacity-40" disabled>
+                <i class="fa-solid fa-file-csv text-emerald-400"></i> Export CSV
+            </button>
+            <button id="btn-export-json" class="glass-btn px-4 py-2 text-xs flex items-center gap-2 disabled:opacity-40" disabled>
+                <i class="fa-solid fa-file-code text-cyan-400"></i> Export JSON
+            </button>
+        </div>
+    </div>
+
+    <!-- Batch Upload Dropzone -->
+    <div class="glass-card p-6 mb-8 border-gradient-cyan">
+        <div id="batch-dropzone" class="glass-dropzone p-10 text-center flex flex-col items-center justify-center cursor-pointer">
+            <input type="file" id="batch-file-input" accept="image/*" multiple class="hidden">
+            <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-500/20 to-purple-500/20 border border-indigo-400/30 flex items-center justify-center text-indigo-400 mb-4 shadow-lg shadow-indigo-500/20">
+                <i class="fa-solid fa-folder-open text-2xl animate-pulse"></i>
+            </div>
+            <h3 class="text-base font-bold text-white tracking-tight">Drop multiple images here</h3>
+            <p class="text-xs text-slate-400 mt-1 font-medium">Select up to 50 images for high-throughput batch classification.</p>
+        </div>
+
+        <!-- Progress Bar Container -->
+        <div id="batch-progress-container" class="mt-4 hidden glass-inset p-3 rounded-xl border border-white/10">
+            <div class="flex items-center justify-between text-xs font-mono text-slate-300 mb-1.5 font-medium">
+                <span id="batch-progress-text">Processing 0 / 0 images...</span>
+                <span id="batch-progress-pct" class="text-cyan-400 font-bold">0%</span>
+            </div>
+            <div class="glass-progress-track w-full h-2.5">
+                <div id="batch-progress-bar" class="glass-progress-fill h-full" style="width: 0%"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Table -->
+    <div class="glass-card overflow-hidden">
+        <div class="p-4 border-b border-white/10 flex items-center justify-between">
+            <span class="text-xs font-mono font-bold uppercase tracking-wider text-slate-200 flex items-center gap-2">
+                <i class="fa-solid fa-table-list text-cyan-400"></i> Processed Items (<span id="batch-count" class="text-cyan-400">0</span>)
+            </span>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs text-slate-300">
+                <thead class="bg-slate-950/60 text-slate-400 uppercase font-mono text-[10px] border-b border-white/10">
+                    <tr>
+                        <th class="p-3.5">Preview</th>
+                        <th class="p-3.5">Filename</th>
+                        <th class="p-3.5">Top Predicted Object</th>
+                        <th class="p-3.5">Confidence</th>
+                        <th class="p-3.5">Verdict</th>
+                        <th class="p-3.5">Latency</th>
+                    </tr>
+                </thead>
+                <tbody id="batch-tbody" class="divide-y divide-white/5 font-medium">
+                    <tr>
+                        <td colspan="6" class="p-8 text-center text-slate-500 italic">No batch items processed yet.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/batch.js') }}"></script>
+{% endblock %}

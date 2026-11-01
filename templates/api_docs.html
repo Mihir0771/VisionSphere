@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+
+{% block title %}VisionSphere — REST API Documentation{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <!-- Header -->
+    <div class="mb-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full glass-inset text-cyan-400 text-xs font-mono mb-2 border border-cyan-400/30 shadow-sm shadow-cyan-500/20">
+            <i class="fa-solid fa-terminal"></i> Developer API
+        </div>
+        <h1 class="text-3xl font-extrabold text-white">RESTful Vision API</h1>
+        <p class="text-slate-400 text-xs sm:text-sm mt-1 font-medium">
+            Programmatically integrate deep learning image recognition, OpenCV diagnostics, and Grad-CAM heatmaps into any application.
+        </p>
+    </div>
+
+    <!-- API Endpoints Grid -->
+    <div class="flex flex-col gap-6">
+
+        <!-- Endpoint 1: POST /api/classify -->
+        <div class="glass-card p-6 flex flex-col gap-4 border-gradient-cyan">
+            <div class="flex items-center gap-3">
+                <span class="px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 font-mono text-xs font-bold shadow-sm shadow-emerald-500/20">POST</span>
+                <span class="font-mono text-sm text-white font-bold tracking-tight">/api/classify</span>
+                <span class="text-xs text-slate-400 font-medium">— Primary classification with diagnostics & telemetry</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                <!-- Request Spec -->
+                <div class="glass-inset p-4 rounded-xl border border-white/10 text-xs font-mono">
+                    <span class="text-cyan-400 font-bold block mb-2">Payload Options:</span>
+                    <ul class="text-slate-300 space-y-1.5 list-disc list-inside">
+                        <li><span class="text-amber-300">Multipart:</span> <code>image</code> (binary file)</li>
+                        <li><span class="text-amber-300">JSON:</span> <code>{"image": "base64..."}</code></li>
+                        <li><span class="text-amber-300">JSON:</span> <code>{"imageUrl": "https://..."}</code></li>
+                        <li><span class="text-amber-300">Query params:</span> <code>model</code>, <code>filter</code>, <code>gradcam=true</code></li>
+                    </ul>
+
+                    <span class="text-cyan-400 font-bold block mt-4 mb-2">cURL Example:</span>
+                    <pre class="bg-slate-950/80 p-3 rounded-lg border border-white/10 text-[11px] text-slate-200 overflow-x-auto">curl -X POST http://127.0.0.1:5000/api/classify \
+  -F "image=@photo.jpg" \
+  -F "model=mobilenet_v3_large" \
+  -F "gradcam=true"</pre>
+                </div>
+
+                <!-- Python Example -->
+                <div class="glass-inset p-4 rounded-xl border border-white/10 text-xs font-mono">
+                    <span class="text-indigo-400 font-bold block mb-2">Python Example:</span>
+                    <pre class="bg-slate-950/80 p-3 rounded-lg border border-white/10 text-[11px] text-indigo-200 overflow-x-auto">import requests
+
+url = "http://127.0.0.1:5000/api/classify"
+with open("dog.jpg", "rb") as f:
+    res = requests.post(
+        url,
+        files={"image": f},
+        data={"model": "mobilenet_v3_large", "gradcam": "true"}
+    )
+data = res.json()
+print("Top:", data["top_prediction"]["label"])
+print("Confidence:", data["top_prediction"]["confidence_pct"])
+print("Latency:", data["telemetry"]["inference_time_ms"], "ms")</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Endpoint 2: POST /api/gradcam -->
+        <div class="glass-card p-6 flex flex-col gap-4 border-gradient-cyan">
+            <div class="flex items-center gap-3">
+                <span class="px-3 py-1 rounded-lg bg-emerald-500/20 border border-emerald-400/40 text-emerald-300 font-mono text-xs font-bold shadow-sm shadow-emerald-500/20">POST</span>
+                <span class="font-mono text-sm text-white font-bold tracking-tight">/api/gradcam</span>
+                <span class="text-xs text-slate-400 font-medium">— Computes neural attention heatmap overlay</span>
+            </div>
+            <pre class="bg-slate-950/80 p-3.5 rounded-xl border border-white/10 text-xs font-mono text-slate-200 overflow-x-auto">curl -X POST http://127.0.0.1:5000/api/gradcam \
+  -H "Content-Type: application/json" \
+  -d '{"image": "data:image/jpeg;base64,...", "model": "mobilenet_v3_large"}'</pre>
+        </div>
+
+        <!-- Endpoint 3: GET /api/models -->
+        <div class="glass-card p-6 flex flex-col gap-4 border-gradient-cyan">
+            <div class="flex items-center gap-3">
+                <span class="px-3 py-1 rounded-lg bg-sky-500/20 border border-sky-400/40 text-sky-300 font-mono text-xs font-bold shadow-sm shadow-sky-500/20">GET</span>
+                <span class="font-mono text-sm text-white font-bold tracking-tight">/api/models</span>
+                <span class="text-xs text-slate-400 font-medium">— Catalog of supported models and runtime specs</span>
+            </div>
+            <pre class="bg-slate-950/80 p-3.5 rounded-xl border border-white/10 text-xs font-mono text-slate-200 overflow-x-auto">curl http://127.0.0.1:5000/api/models</pre>
+        </div>
+
+        <!-- Endpoint 4: GET /api/health -->
+        <div class="glass-card p-6 flex flex-col gap-4 border-gradient-cyan">
+            <div class="flex items-center gap-3">
+                <span class="px-3 py-1 rounded-lg bg-sky-500/20 border border-sky-400/40 text-sky-300 font-mono text-xs font-bold shadow-sm shadow-sky-500/20">GET</span>
+                <span class="font-mono text-sm text-white font-bold tracking-tight">/api/health</span>
+                <span class="text-xs text-slate-400 font-medium">— Server health, hardware accelerator and framework version</span>
+            </div>
+            <pre class="bg-slate-950/80 p-3.5 rounded-xl border border-white/10 text-xs font-mono text-slate-200 overflow-x-auto">curl http://127.0.0.1:5000/api/health</pre>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block title %}VisionSphere — Dual Image Comparison Studio{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <!-- Header -->
+    <div class="mb-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full glass-inset text-cyan-400 text-xs font-mono mb-2 border border-cyan-400/30 shadow-sm shadow-cyan-500/20">
+            <i class="fa-solid fa-code-compare"></i> Dual-Model & Dual-Image Benchmark
+        </div>
+        <h1 class="text-3xl font-extrabold text-white">Side-by-Side Comparison</h1>
+        <p class="text-slate-400 text-xs sm:text-sm mt-1 font-medium">
+            Benchmark classifications between two images, or evaluate how different architectures (e.g. MobileNet vs ResNet) classify the same scene.
+        </p>
+    </div>
+
+    <!-- Side-by-side Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Slot A -->
+        <div class="glass-card p-6 flex flex-col gap-4 border-gradient-cyan">
+            <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                <span class="text-xs font-mono font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span> Slot A
+                </span>
+                <select id="model-a" class="glass-select text-slate-100 text-xs font-semibold py-1 px-2.5">
+                    {% for key, m in models.items() %}
+                    <option value="{{ key }}" class="bg-slate-900" {% if key == 'mobilenet_v3_large' %}selected{% endif %}>{{ m.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Upload Zone A -->
+            <div id="dropzone-a" class="glass-dropzone p-6 text-center cursor-pointer min-h-[220px] flex flex-col items-center justify-center">
+                <input type="file" id="file-a" accept="image/*" class="hidden">
+                <img id="preview-a" class="max-h-[200px] object-contain rounded-xl hidden shadow-2xl">
+                <div id="placeholder-a">
+                    <div class="w-14 h-14 rounded-2xl glass-inset flex items-center justify-center text-cyan-400 mx-auto mb-2 border border-cyan-400/20">
+                        <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
+                    </div>
+                    <p class="text-xs text-slate-200 font-semibold">Drop Image A or Click to Browse</p>
+                    <p class="text-[11px] text-slate-400 mt-0.5">Supports PNG, JPG, WEBP</p>
+                </div>
+            </div>
+
+            <!-- Results A -->
+            <div id="result-a" class="glass-inset p-4 rounded-xl border border-white/10 flex flex-col gap-3 min-h-[140px] justify-center">
+                <div class="text-center text-xs text-slate-500 italic font-medium">Awaiting image upload...</div>
+            </div>
+        </div>
+
+        <!-- Slot B -->
+        <div class="glass-card p-6 flex flex-col gap-4 border-gradient-cyan">
+            <div class="flex items-center justify-between border-b border-white/10 pb-3">
+                <span class="text-xs font-mono font-bold text-indigo-400 uppercase tracking-wider flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span> Slot B
+                </span>
+                <select id="model-b" class="glass-select text-slate-100 text-xs font-semibold py-1 px-2.5">
+                    {% for key, m in models.items() %}
+                    <option value="{{ key }}" class="bg-slate-900" {% if key == 'mobilenet_v3_small' %}selected{% endif %}>{{ m.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Upload Zone B -->
+            <div id="dropzone-b" class="glass-dropzone p-6 text-center cursor-pointer min-h-[220px] flex flex-col items-center justify-center">
+                <input type="file" id="file-b" accept="image/*" class="hidden">
+                <img id="preview-b" class="max-h-[200px] object-contain rounded-xl hidden shadow-2xl">
+                <div id="placeholder-b">
+                    <div class="w-14 h-14 rounded-2xl glass-inset flex items-center justify-center text-indigo-400 mx-auto mb-2 border border-indigo-400/20">
+                        <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
+                    </div>
+                    <p class="text-xs text-slate-200 font-semibold">Drop Image B or Click to Browse</p>
+                    <p class="text-[11px] text-slate-400 mt-0.5">Supports PNG, JPG, WEBP</p>
+                </div>
+            </div>
+
+            <!-- Results B -->
+            <div id="result-b" class="glass-inset p-4 rounded-xl border border-white/10 flex flex-col gap-3 min-h-[140px] justify-center">
+                <div class="text-center text-xs text-slate-500 italic font-medium">Awaiting image upload...</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/compare.js') }}"></script>
+{% endblock %}

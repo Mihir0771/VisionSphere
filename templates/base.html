@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}VisionSphere — Intelligent Image Recognition{% endblock %}</title>
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2306b6d4'><circle cx='12' cy='12' r='10'/></svg>">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Custom Clean Glassmorphism Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-cyan-500 selection:text-slate-950 relative">
+
+    <!-- Subtle Ambient Lighting (Quiet, not loud) -->
+    <div class="ambient-mesh">
+        <div class="ambient-blob blob-1"></div>
+        <div class="ambient-blob blob-2"></div>
+    </div>
+
+    <!-- Clean, Minimalist Navigation Bar -->
+    <header class="sticky top-0 z-50 backdrop-blur-xl bg-slate-950/70 border-b border-white/5 transition-all">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="/" class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center shadow-md shadow-cyan-500/20">
+                    <i class="fa-solid fa-cube text-white text-sm"></i>
+                </div>
+                <div class="flex items-baseline gap-2">
+                    <span class="font-bold text-base tracking-tight text-white">Vision<span class="text-cyan-400">Sphere</span></span>
+                    <span class="hidden sm:inline-block text-[10px] text-slate-400 font-mono tracking-wider uppercase">AI Classifier</span>
+                </div>
+            </a>
+
+            <!-- Clean Navigation Pills -->
+            <nav class="flex items-center gap-1 bg-white/[0.03] p-1 rounded-full border border-white/5 text-xs font-medium">
+                <a href="/" class="px-3.5 py-1.5 rounded-full transition-all {% if request.path == '/' %}bg-white/10 text-white font-semibold shadow-sm{% else %}text-slate-400 hover:text-slate-200{% endif %}">
+                    Studio
+                </a>
+                <a href="/compare" class="px-3.5 py-1.5 rounded-full transition-all {% if request.path == '/compare' %}bg-white/10 text-white font-semibold shadow-sm{% else %}text-slate-400 hover:text-slate-200{% endif %}">
+                    Compare
+                </a>
+                <a href="/batch" class="px-3.5 py-1.5 rounded-full transition-all {% if request.path == '/batch' %}bg-white/10 text-white font-semibold shadow-sm{% else %}text-slate-400 hover:text-slate-200{% endif %}">
+                    Batch
+                </a>
+                <a href="/api-docs" class="px-3.5 py-1.5 rounded-full transition-all {% if request.path == '/api-docs' %}bg-white/10 text-white font-semibold shadow-sm{% else %}text-slate-400 hover:text-slate-200{% endif %}">
+                    API
+                </a>
+                <a href="/about" class="px-3.5 py-1.5 rounded-full transition-all {% if request.path == '/about' %}bg-white/10 text-white font-semibold shadow-sm{% else %}text-slate-400 hover:text-slate-200{% endif %}">
+                    About
+                </a>
+            </nav>
+
+            <!-- Status Indicator -->
+            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.03] border border-white/5 text-[11px] font-mono text-slate-300">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+                    <span>Ready</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow z-10 relative">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Toast Notifications Container -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2.5 pointer-events-none"></div>
+
+    <!-- Clean Footer -->
+    <footer class="mt-auto border-t border-white/5 bg-slate-950/40 py-6 px-4 z-10 relative">
+        <div class="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 font-mono">
+            <div>VisionSphere AI &bull; Deep Learning Image Recognition</div>
+            <div>Built with Python, TensorFlow, OpenCV & Flask</div>
+            <div>&copy; 2026 Mihir &bull; MIT License</div>
+        </div>
+    </footer>
+
+    <!-- Global Scripts -->
+    {% block scripts %}{% endblock %}
+</body>
+</html>
